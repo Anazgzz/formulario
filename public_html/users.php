@@ -36,7 +36,12 @@ switch($action)
 		}
 		else
 		{
-// 			definir arrayUser
+			
+			if($action=='insert')
+			{
+				definir arrayUser
+				
+			}
 			
 			include("../application/views/formulario.php");
 		}

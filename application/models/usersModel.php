@@ -67,3 +67,9 @@ function readUser($id)
 	return $arrayUser;
 }
 
+
+function iniArrayUser()
+{
+	
+	return $arrayUser
+}
