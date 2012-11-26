@@ -36,7 +36,7 @@ switch($action)
 		}
 		else
 		{
-// 			de finir arrayUser
+// 			definir arrayUser
 			
 			include("../application/views/formulario.php");
 		}
