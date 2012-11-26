@@ -70,6 +70,6 @@ function readUser($id)
 
 function iniArrayUser()
 {
-	
-	return $arrayUser
+	$arrayUser=array();
+	return $arrayUser;
 }
