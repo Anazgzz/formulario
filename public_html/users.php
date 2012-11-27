@@ -3,7 +3,7 @@
 require_once("../application/models/applicationModel.php");
 require_once("../application/models/usersModel.php");
 
-$config=readConfig('../application/configs/config.ini', 'testing');
+$config=readConfig('../application/configs/config.ini', 'production');
 
 // Inicializaciones
 $arrayUser=initArrayUser();
@@ -20,21 +20,21 @@ switch($action)
 // 		die("esto es update");
 		if ($_POST)
 		{
-			$imageName=updateImage($_FILES, $_GET['id']);
-			updateToFile($imageName, $_GET['id']);
+			$imageName=updateImage($_FILES, $_GET['id'], $config['filename']);
+			updateToFile($imageName, $_GET['id'], $config['filename']);
 			header ("Location: users.php?action=select");
 			exit();
 		}
 		else
 		{
-			$arrayUser=readUser($_GET['id']);			
+			$arrayUser=readUser($_GET['id'], $config['filename']);			
 		}
 
 	case 'insert':
 		if($_POST)
 		{			
-			$imageName=uploadImage($_FILES);
-			writeToFile($imageName);
+			$imageName=uploadImage($_FILES, $config['uploadDirectory']);
+			writeToFile($imageName, $config['filename']);
 			header ("Location: users.php?action=select");
 			exit();
 		}
@@ -49,7 +49,7 @@ switch($action)
 		{
 			if($_POST['submit']=='si')
 			{
-				deleteUser($_GET['id']);
+				deleteUser($_GET['id'], $config['filename']);
 				header ("Location: users.php?action=select");
 				exit();
 			}
@@ -66,7 +66,7 @@ switch($action)
 		}
 	break;
 	case 'select':
-		$arrayUsers=readUsersFromFile();	
+		$arrayUsers=readUsersFromFile($config['filename']);	
 		include("../application/views/select.php");
 	default:
 	break; 

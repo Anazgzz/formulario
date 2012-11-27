@@ -5,10 +5,8 @@
  * @param array $_FILES Array FILES
  * @return string Image final name
  */
-function uploadImage($_FILES)
+function uploadImage($_FILES, $uploadDirectory)
 {
-	//TODO: Read from config.ini
-	$uploadDirectory=$_SERVER['DOCUMENT_ROOT']."/uploads";	
 	$destination = $uploadDirectory."/".$_FILES['photo']['name'];
 	$filename = $_FILES['photo']['tmp_name'];
 	$path_parts = pathinfo($destination);
@@ -29,9 +27,9 @@ function uploadImage($_FILES)
  * @param array $_FILES Files array
  * @param int $id User id
  */
-function updateImage($_FILES, $id)
+function updateImage($_FILES, $id, $filename)
 {
-	$arrayUser=readUser($id);
+	$arrayUser=readUser($id, $filename);
 	$image=$arrayUser[10];	
 // 	Si FILES nueva 
 	if(isset($_FILES['photo']['name']))
@@ -58,7 +56,7 @@ function updateImage($_FILES, $id)
  * White users to .txt file
  * @param string $imageName Image name
  */
-function writeToFile($imageName)
+function writeToFile($imageName, $filename)
 {
 	foreach($_POST as $value)
 	{
@@ -68,7 +66,7 @@ function writeToFile($imageName)
 	}
 	$arrayUser[]=$imageName;
 	$textUser=implode('|',$arrayUser);
-	file_put_contents("users.txt", $textUser."\r\n", FILE_APPEND);
+	file_put_contents($filename, $textUser."\r\n", FILE_APPEND);
 }
 
 /**
@@ -76,10 +74,10 @@ function writeToFile($imageName)
  * @param string $imageName Image name
  * @param string $id User id
  */
-function updateToFile($imageName, $id)
+function updateToFile($imageName, $id, $filename)
 {
 	//Leer los datos del archivo
-	$arrayUsers=readUsersFromFile();
+	$arrayUsers=readUsersFromFile($filename);
 	foreach($_POST as $value)
 	{
 		if(is_array($value))
@@ -92,17 +90,15 @@ function updateToFile($imageName, $id)
 	$arrayUsers[$id]=$textUser;
 	$textUsers=implode("\r\n",$arrayUsers);
 	
-	file_put_contents("users.txt", $textUsers);
+	file_put_contents($filename, $textUsers);
 }
 
 /**
  * Read users from file 
  * @return array: Users array
  */
-function readUsersFromFile()
+function readUsersFromFile($filename)
 {
-	//TODO: Read from config.ini
-	$filename="users.txt";
 	$usersText=file_get_contents($filename);
 	$arrayUsers=explode("\n",$usersText);	
 	return $arrayUsers;
@@ -113,9 +109,9 @@ function readUsersFromFile()
  * @param int $id User id: line number
  * @return array: User array
  */
-function readUser($id)
+function readUser($id, $filename)
 {
-	$arrayUsers=readUsersFromFile();
+	$arrayUsers=readUsersFromFile($filename);
 	$arrayUser=$arrayUsers[$_GET['id']];
 	$arrayUser=explode("|",$arrayUser);
 	return $arrayUser;
@@ -137,10 +133,10 @@ function initArrayUser()
  * Delete user from file and image from directory
  * @param int $id User Id
  */
-function deleteUser($id)
+function deleteUser($id, $filename)
 {
 // 	Leer el usuario segun id
-	$arrayUser=readUser($id);
+	$arrayUser=readUser($id,$filename);
 // 	Tomar la foto
 	$image=$arrayUser[10];	
 
@@ -153,7 +149,7 @@ function deleteUser($id)
 	
 	
 // 	Tomar todos los usuarios
-	$arrayUsers=readUsersFromFile();
+	$arrayUsers=readUsersFromFile($filename);
 	
 // 	Borrar el usuario id
 	unset($arrayUsers[$id]);
