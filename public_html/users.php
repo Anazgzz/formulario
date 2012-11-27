@@ -72,6 +72,9 @@ switch($action)
 	break; 
 }
 
+$content="ESTO ES CONTENT EN USERS";
+
+include("../application/layouts/layout_admin1.php");
 
 
 
