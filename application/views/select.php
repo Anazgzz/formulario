@@ -18,7 +18,7 @@
 		<?php endforeach;?>
 		<td>
 		<a href="?action=update&id=<?=$key?>">Editar</a>
-		<a href="?action=delete">Borrar</a>
+		<a href="?action=delete&id=<?=$key?>">Borrar</a>
 		</td>
 		</tr>
 	<?php endforeach;?>

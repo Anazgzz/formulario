@@ -25,6 +25,36 @@ function uploadImage($_FILES)
 }
 
 /**
+ * Update user image
+ * @param array $_FILES Files array
+ * @param int $id User id
+ */
+function updateImage($_FILES, $id)
+{
+	$arrayUser=readUser($id);
+	$image=$arrayUser[10];	
+// 	Si FILES nueva 
+	if(isset($_FILES['photo']['name']))
+	{
+		$uploadDirectory=$_SERVER['DOCUMENT_ROOT']."/uploads";
+// 		borrar imagen		
+		$image=str_replace("\r", "", $image);
+		$image=str_replace("\n", "", $image);
+		unlink($uploadDirectory."/".$image);
+// 		subir imagen nueva
+		$image=uploadImage($_FILES);
+		
+	}
+// 	de lo contrario
+	else
+	{ 
+// 		no borrar nada
+	}
+// 	devolver imagen
+	return $image;
+}
+
+/**
  * White users to .txt file
  * @param string $imageName Image name
  */
@@ -39,6 +69,30 @@ function writeToFile($imageName)
 	$arrayUser[]=$imageName;
 	$textUser=implode('|',$arrayUser);
 	file_put_contents("users.txt", $textUser."\r\n", FILE_APPEND);
+}
+
+/**
+ * Update users file
+ * @param string $imageName Image name
+ * @param string $id User id
+ */
+function updateToFile($imageName, $id)
+{
+	//Leer los datos del archivo
+	$arrayUsers=readUsersFromFile();
+	foreach($_POST as $value)
+	{
+		if(is_array($value))
+			$value=implode(',',$value);
+		$arrayUser[]=$value;
+	}
+	$arrayUser[]=$imageName;
+	$textUser=implode('|',$arrayUser);
+	
+	$arrayUsers[$id]=$textUser;
+	$textUsers=implode("\r\n",$arrayUsers);
+	
+	file_put_contents("users.txt", $textUsers);
 }
 
 /**
@@ -67,9 +121,57 @@ function readUser($id)
 	return $arrayUser;
 }
 
-
-function iniArrayUser()
+/**
+ * Inicializa el array de usuarios
+ * @return array Users array
+ */
+function initArrayUser()
 {
 	$arrayUser=array();
+	for ($i=0;$i<11;$i++)
+		$arrayUser[$i]=NULL;
 	return $arrayUser;
 }
+
+/**
+ * Delete user from file and image from directory
+ * @param int $id User Id
+ */
+function deleteUser($id)
+{
+// 	Leer el usuario segun id
+	$arrayUser=readUser($id);
+// 	Tomar la foto
+	$image=$arrayUser[10];	
+
+		$uploadDirectory=$_SERVER['DOCUMENT_ROOT']."/uploads";	
+// 		Limpiar el nombre de la foto
+		$image=str_replace("\r", "", $image);
+		$image=str_replace("\n", "", $image);
+// 		Borrar la foto
+		unlink($uploadDirectory."/".$image);
+	
+	
+// 	Tomar todos los usuarios
+	$arrayUsers=readUsersFromFile();
+	
+// 	Borrar el usuario id
+	unset($arrayUsers[$id]);
+		
+// 	Hacer el string 
+	$textUsers=implode("\r\n",$arrayUsers);
+	
+// 	Reescribir fichero txt
+	file_put_contents("users.txt", $textUsers);
+}
+
+
+
+
+
+
+
+
+
+
+

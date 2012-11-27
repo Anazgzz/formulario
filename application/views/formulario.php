@@ -8,7 +8,7 @@
 <meta charset="UTF-8" />
 </head>
 <body>
-<form action="?action=insert" method="POST"
+<form method="POST"
 	enctype="multipart/form-data">
 <ul>
 <li>
