@@ -16,7 +16,7 @@ function uploadImage($_FILES, $uploadDirectory)
 	{
 		$i++;
 		$name=$path_parts['filename']."_".$i.".".$path_parts['extension'];
-	}	
+	}
 	$destination = $uploadDirectory."/".$name;
 	move_uploaded_file($filename, $destination);
 	return $name;

@@ -1,5 +1,7 @@
 <?php 
 
+define ('DOCUMENT_ROOT', $_SERVER['DOCUMENT_ROOT']);
+
 require_once("../application/models/applicationModel.php");
 require_once("../application/models/usersModel.php");
 
@@ -40,7 +42,8 @@ switch($action)
 		}
 		else
 		{
-			include("../application/views/formulario.php");
+			$params=array('arrayUser'=>$arrayUser);
+			$content=renderView($config, 'formulario', $params);
 		}
 			
 	break;
@@ -54,25 +57,25 @@ switch($action)
 				exit();
 			}
 			else
-			{
+			{				
 				header ("Location: users.php?action=select");
-				exit();
+				exit();				
 			}
 				
 		}
 		else
 		{
-			include("../application/views/delete.php");
+			$content=renderView($config, 'delete', array());
 		}
 	break;
-	case 'select':
+	case 'select':		
 		$arrayUsers=readUsersFromFile($config['filename']);	
-		include("../application/views/select.php");
+		$params=array('arrayUsers'=>$arrayUsers);
+		$content=renderView($config, 'select', $params);
 	default:
 	break; 
 }
 
-$content="ESTO ES CONTENT EN USERS";
 
 include("../application/layouts/layout_admin1.php");
 

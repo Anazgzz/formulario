@@ -1,3 +1,6 @@
+<?php 
+$arrayUser=$params['arrayUser'];
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

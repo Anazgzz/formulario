@@ -1,3 +1,6 @@
+<?php 
+$arrayUsers=$params['arrayUsers'];
+?>
 <a href="?action=insert">agregar</a>
 <table border=1>
 	<tr>
